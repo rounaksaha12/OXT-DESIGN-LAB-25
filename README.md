@@ -122,4 +122,5 @@ The script will then:
 ## Notes
 - Repeat this procedure for **each query** you want to analyse.
 - Memory is dumped at the granularity defined by `BYTES_PER_STEP` inside the script (default 1024 bytes).
+- You must manually set MODE="x" or MODE="xp" inside desgnlab.sh before running, depending on which format you wish to capture.
 - The diff output makes it easy to inspect any memory changes caused by query processing visually.
