@@ -44,5 +44,5 @@ def process_db6k(file_path, N):
     print(f"Generated {len(sampled_pairs)} pairs in input.txt and exp_output.txt.")
 
 # Example usage:
-process_db6k('db6k.dat', 100)
+process_db6k('db6k.dat', 4)
 
