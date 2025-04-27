@@ -70,3 +70,56 @@ and then in client,
 Note that the **client program waits for the user to press Enter after each query is performed to read the next line from** `input.txt`
 
 After all queries are done, run `OXT_CONJ_CLIENT/client/results/evaluate_correctness.py` to verify if the server returned correct docids.
+
+## Memory Dumping and Analysis
+
+To study the memory behavior of the `sse_search_server` running inside QEMU after each query, we provide an automated script `mem_dump.sh`. This script connects to the QEMU monitor port and issues `x/fmt addr` or `xp/fmt addr` commands to capture the memory state. It dumps the executable region (`r-xp` section) of the `sse_search_server` binary before and after a query execution, then generates a diff highlighting memory changes. This enables detailed analysis of how conjunctive searchable encryption queries affect the server's in-memory state.
+
+Before using the script, ensure that QEMU is launched with a monitor port enabled:
+
+```bash
+qemu-system-x86_64 \
+  ... \
+  -monitor tcp:127.0.0.1:4444,server,nowait \
+  ...
+```
+
+Also, ensure that `./sse_search_server` inside the VM is modified to wait for user input after completing each query. This keeps the process alive for memory capture.
+
+## Usage Instructions for Memory Dump Script (`desgnlab.sh`)
+
+1. Start `./sse_search_server` inside the QEMU VM.
+2. From your local machine, run:
+
+```bash
+bash mem_dump.sh
+```
+
+The script will automatically:
+- Connect to the VM via SSH.
+- Locate the `sse_search_server` process.
+- Parse the executable memory region from `/proc/<pid>/maps`.
+- Dump the memory **before** executing a query.
+
+The script will then pause with the prompt:
+
+> [*] Run your query inside the VM. Press ENTER to continue...
+
+At this point:
+- Switch to the QEMU VM terminal where `./sse_search_server` is running.
+- Press **Enter** inside `./sse_search_server` to execute the next query from `input.txt`.
+- After the query finishes, switch back to your bash terminal.
+- Press **Enter** to continue the memory dump process.
+
+The script will then:
+- Dump the memory **after** the query execution.
+- Generate a side-by-side diff showing changes.
+- Save results into:
+  - `memory_before.txt`
+  - `memory_after.txt`
+  - `memory_diff.txt`
+
+## Notes
+- Repeat this procedure for **each query** you want to analyse.
+- Memory is dumped at the granularity defined by `BYTES_PER_STEP` inside the script (default 1024 bytes).
+- The diff output makes it easy to inspect any memory changes caused by query processing visually.
