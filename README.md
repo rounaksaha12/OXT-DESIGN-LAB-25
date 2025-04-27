@@ -86,7 +86,7 @@ qemu-system-x86_64 \
 
 Also, ensure that `./sse_search_server` inside the VM is modified to wait for user input after completing each query. This keeps the process alive for memory capture.
 
-## Usage Instructions for Memory Dump Script (`desgnlab.sh`)
+## Usage Instructions for Memory Dump Script (`mem_dump.sh`)
 
 1. Start `./sse_search_server` inside the QEMU VM.
 2. From your local machine, run:
