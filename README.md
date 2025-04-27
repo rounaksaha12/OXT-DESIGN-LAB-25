@@ -86,7 +86,7 @@ qemu-system-x86_64 \
 
 Also, ensure that `./sse_search_server` inside the VM is modified to wait for user input after completing each query. This keeps the process alive for memory capture.
 
-## Usage Instructions for Memory Dump Script (`mem_dump.sh`)
+### Usage Instructions for Memory Dump Script (`mem_dump.sh`)
 
 1. Start `./sse_search_server` inside the QEMU VM.
 2. From your local machine, run:
@@ -106,9 +106,9 @@ The script will then pause with the prompt:
 > [*] Run your query inside the VM. Press ENTER to continue...
 
 At this point:
-- Switch to the QEMU VM terminal where `./sse_search_server` is running.
-- Press **Enter** inside `./sse_search_server` to execute the next query from `input.txt`.
-- After the query finishes, switch back to your bash terminal.
+- Switch to a different terminal in local machine and fire `./sse_search_client`.
+- This executes the first query from `input.txt`.
+- After the query finishes, switch back to memdump terminal.
 - Press **Enter** to continue the memory dump process.
 
 The script will then:
@@ -119,8 +119,8 @@ The script will then:
   - `memory_after.txt`
   - `memory_diff.txt`
 
-## Notes
-- Repeat this procedure for **each query** you want to analyse.
+### Notes
+- Repeat this procedure for **each query** you want to analyse (fire `mem_dump.sh` before query, press **Enter** after query)
 - Memory is dumped at the granularity defined by `BYTES_PER_STEP` inside the script (default 1024 bytes).
 - You must manually set MODE="x" or MODE="xp" inside desgnlab.sh before running, depending on which format you wish to capture.
 - The diff output makes it easy to inspect any memory changes caused by query processing visually.
